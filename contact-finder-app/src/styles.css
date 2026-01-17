@@ -1,0 +1,376 @@
+@media (max-width: 700px) {
+  .input-row-responsive {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  .input-row-responsive > div {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  input,
+  select,
+  textarea {
+    font-size: 15px !important;
+    padding: 10px 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+  .card-dark,
+  .app-container,
+  .container,
+  .step-card,
+  .contact-card,
+  .contact-grid {
+    max-width: 100vw !important;
+    overflow-x: auto !important;
+    box-sizing: border-box !important;
+  }
+  pre {
+    word-break: break-word !important;
+    white-space: pre-wrap !important;
+    max-width: 100vw !important;
+    overflow-x: auto !important;
+  }
+}
+/* Responsive overrides for ContactSelect */
+@media (max-width: 700px) {
+  .contact-grid-responsive {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  .contact-card-responsive {
+    padding: 12px 6px 10px 6px !important;
+    font-size: 0.98em !important;
+    border-radius: 10px !important;
+    box-shadow: 0 1px 6px #0003 !important;
+    min-width: 0 !important;
+  }
+  .contact-label-responsive {
+    display: flex !important;
+    align-items: center !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    gap: 8px !important;
+    font-size: 15px !important;
+  }
+  .contact-name-responsive {
+    font-size: 15px !important;
+  }
+  .contact-role-responsive {
+    font-size: 13px !important;
+  }
+  .contact-email-responsive {
+    font-size: 13px !important;
+    color: #b0b8c9 !important;
+    margin-top: 4px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-wrap: wrap !important;
+  }
+  .contact-copy-btn-responsive {
+    padding: 4px 10px !important;
+    font-size: 13px !important;
+    border-radius: 5px !important;
+    margin-left: 4px !important;
+  }
+}
+/*
+  Custom dark theme and background for the app, including a faded Lion and Sun Iran flag.
+  Place your lion and sun flag image in public/lion-sun-flag.png for best results.
+*/
+
+body {
+  background: #181c24;
+  color: #f3f6fa;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  position: relative;
+}
+
+#lion-sun-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  background: url("../public/Shah.png") center center no-repeat;
+  background-size: 70vw auto;
+  opacity: 0.18;
+  pointer-events: none;
+  filter: grayscale(0.1) brightness(1.1) contrast(1.15)
+    drop-shadow(0 0 32px #000b);
+}
+
+.app-container {
+  position: relative;
+  z-index: 1;
+}
+
+.card-dark {
+  background: #232837ee;
+  /* Country button grid */
+  .country-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin: 18px 0 12px 0;
+  }
+  .country-btn {
+    background: linear-gradient(90deg, #f3d34a 60%, #f7b32b 100%);
+    color: #232837;
+    font-weight: 700;
+    font-size: 1.08em;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 28px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(243, 211, 74, 0.08);
+    transition: background 0.18s, color 0.18s;
+    outline: none;
+  }
+  .country-btn.selected,
+  .country-btn:focus {
+    background: linear-gradient(90deg, #1976d2 60%, #1565c0 100%);
+    color: #fff;
+  }
+  .country-btn:hover {
+    background: linear-gradient(90deg, #ffe066 60%, #f7b32b 100%);
+    color: #181c24;
+  }
+
+  /* Contact select grid */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+    margin: 18px 0 18px 0;
+  }
+  .contact-card {
+    background: #232837;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #0002;
+    padding: 18px 16px 14px 16px;
+    border: 1.5px solid #232837;
+    color: #f3f6fa;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: border 0.18s, box-shadow 0.18s;
+  }
+  .contact-card.selected,
+  .contact-card:focus-within {
+    border: 1.5px solid #f3d34a;
+    box-shadow: 0 2px 16px #f3d34a33;
+  }
+  .contact-radio {
+    accent-color: #f3d34a;
+    margin-right: 10px;
+  }
+  .contact-name {
+    font-weight: 700;
+    font-size: 1.08em;
+    color: #f3d34a;
+  }
+  .contact-role {
+    font-size: 0.98em;
+    color: #b0b8c9;
+    margin-left: 2px;
+  }
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
+  padding: 38px 36px 32px 36px;
+  border: 1px solid #232837;
+  margin-bottom: 36px;
+}
+
+input,
+select,
+textarea {
+  background: #232837;
+  color: #f3f6fa;
+  border: 1px solid #3a4052;
+  border-radius: 7px;
+  padding: 12px 14px;
+  font-size: 16px;
+  margin-bottom: 0;
+  outline: none;
+  transition: border 0.2s;
+}
+input:focus,
+select:focus,
+textarea:focus {
+  border: 1.5px solid #1976d2;
+}
+
+button {
+  background: linear-gradient(90deg, #1976d2 60%, #1565c0 100%);
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 7px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+  transition: background 0.2s;
+  letter-spacing: 0.2px;
+  display: inline-block;
+}
+button:disabled {
+  background: #444b5a;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+label {
+  color: #e0e6f0;
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.step-header {
+  font-weight: 800;
+  font-size: 24px;
+  color: #f3d34a;
+  text-shadow: 0 2px 8px #0008;
+  margin-bottom: 18px;
+  letter-spacing: 0.5px;
+}
+
+.section-desc {
+  color: #b0b8c9;
+  font-size: 16px;
+  margin-bottom: 24px;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+}
+
+pre {
+  background: #181c24;
+  color: #f3f6fa;
+  border-radius: 8px;
+  padding: 18px;
+  font-size: 15px;
+  border: 1px solid #232837;
+  margin-bottom: 0;
+  font-family: "Fira Mono", "Consolas", "Menlo", monospace;
+  box-shadow: 0 2px 8px #0002;
+}
+/* Remove duplicate/old body and container styles */
+
+h1 {
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+
+.container {
+  max-width: 650px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.09);
+  padding: 2.2rem 1.5rem 1.5rem 1.5rem;
+}
+
+.step-indicator {
+  font-size: 1.1rem;
+  color: #888;
+}
+.active-step {
+  color: #1976d2;
+  font-weight: 600;
+}
+
+.step-card {
+  background: #f8fafd;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  padding: 1.5rem 1rem;
+  margin-bottom: 2rem;
+}
+
+.input-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-bottom: 1.5rem;
+}
+.input-group input,
+.input-group select {
+  padding: 0.5rem 0.7rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  min-width: 140px;
+}
+
+.back-btn {
+  background: none;
+  color: #1976d2;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  padding: 0;
+}
+
+@media (max-width: 700px) {
+  .app-container {
+    max-width: 100vw !important;
+    padding: 0 0 24px 0 !important;
+  }
+  .card-dark {
+    padding: 16px 4px !important;
+    margin-bottom: 18px !important;
+    border-radius: 10px !important;
+    box-shadow: 0 1px 6px #0003 !important;
+  }
+  .country-grid {
+    gap: 10px !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+  }
+  .country-btn {
+    width: 100% !important;
+    font-size: 1em !important;
+    padding: 12px 0 !important;
+    min-width: 0 !important;
+  }
+  .contact-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  .contact-card {
+    padding: 12px 6px 10px 6px !important;
+    font-size: 0.98em !important;
+    min-width: 0 !important;
+  }
+  input,
+  select,
+  textarea {
+    font-size: 15px !important;
+    padding: 10px 8px !important;
+  }
+  .step-header {
+    font-size: 19px !important;
+    margin-bottom: 10px !important;
+  }
+  pre {
+    font-size: 13px !important;
+    padding: 10px !important;
+  }
+  button {
+    font-size: 15px !important;
+    padding: 8px 10px !important;
+    margin-top: 8px !important;
+  }
+  .section-desc {
+    font-size: 14px !important;
+    margin-bottom: 12px !important;
+  }
+}
