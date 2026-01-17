@@ -1,0 +1,41 @@
+# Node modules
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.*
+
+# VSCode
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.env
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Misc
+*.log
+coverage/
+
+# Ignore data files that shouldn't be in repo
+contact-finder-app/src/data/EUOfficialContacts.real.json
