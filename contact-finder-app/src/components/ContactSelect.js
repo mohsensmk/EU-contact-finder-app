@@ -3,23 +3,62 @@ import contactsData from "../data/EUOfficialContacts.real.json";
 import { uxCopy } from "../data/uxCopy";
 
 function ContactSelect({ country, onSelect, onBack }) {
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
-  const PAGE_SIZE = 12;
+  const PAGE_SIZE = 24;
+
+  // Revert to simple country filter and alphabetical sort only
   const contacts = contactsData.filter((c) => c.country === country);
+  const pagedContacts = contacts
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+
   const pageCount = Math.ceil(contacts.length / PAGE_SIZE);
-  const pagedContacts = contacts.slice(
-    page * PAGE_SIZE,
-    (page + 1) * PAGE_SIZE
-  );
 
   const handleSelect = (contact) => {
-    setSelected(contact);
+    setSelected((prev) => {
+      if (prev.includes(contact)) {
+        return prev.filter((c) => c !== contact);
+      } else {
+        return [...prev, contact];
+      }
+    });
   };
 
-  const handleCopyEmail = (email) => {
-    navigator.clipboard.writeText(email);
-  };
+  // Utility: getCountryFlag
+  function getCountryFlag(country) {
+    // Simple country-to-emoji mapping for EU countries
+    const flags = {
+      Austria: "🇦🇹",
+      Belgium: "🇧🇪",
+      Bulgaria: "🇧🇬",
+      Croatia: "🇭🇷",
+      Cyprus: "🇨🇾",
+      Czechia: "🇨🇿",
+      Denmark: "🇩🇰",
+      Estonia: "🇪🇪",
+      Finland: "🇫🇮",
+      France: "🇫🇷",
+      Germany: "🇩🇪",
+      Greece: "🇬🇷",
+      Hungary: "🇭🇺",
+      Ireland: "🇮🇪",
+      Italy: "🇮🇹",
+      Latvia: "🇱🇻",
+      Lithuania: "🇱🇹",
+      Luxembourg: "🇱🇺",
+      Malta: "🇲🇹",
+      Netherlands: "🇳🇱",
+      Poland: "🇵🇱",
+      Portugal: "🇵🇹",
+      Romania: "🇷🇴",
+      Slovakia: "🇸🇰",
+      Slovenia: "🇸🇮",
+      Spain: "🇪🇸",
+      Sweden: "🇸🇪",
+    };
+    return flags[country] || "";
+  }
 
   return (
     <div>
@@ -29,7 +68,7 @@ function ContactSelect({ country, onSelect, onBack }) {
           <div
             key={i + page * PAGE_SIZE}
             className={`contact-card${
-              selected === c ? " selected" : ""
+              selected.includes(c) ? " selected" : ""
             } contact-card-responsive`}
             tabIndex={0}
             onClick={() => handleSelect(c)}
@@ -48,9 +87,8 @@ function ContactSelect({ country, onSelect, onBack }) {
               }}
             >
               <input
-                type="radio"
-                name="official"
-                checked={selected === c}
+                type="checkbox"
+                checked={selected.includes(c)}
                 onChange={() => handleSelect(c)}
                 className="contact-radio"
                 tabIndex={-1}
@@ -67,7 +105,31 @@ function ContactSelect({ country, onSelect, onBack }) {
               >
                 {c.name}
               </span>
+              {/* Country flag */}
+              {c.country && (
+                <span
+                  style={{
+                    marginLeft: 8,
+                    fontSize: 22,
+                    verticalAlign: "middle",
+                  }}
+                  title={c.country}
+                >
+                  {getCountryFlag(c.country)}
+                </span>
+              )}
             </div>
+            {/* Political group and committees */}
+            {c.group && (
+              <div style={{ fontSize: 14, color: "#b0b8c9", fontWeight: 600 }}>
+                {c.group}
+              </div>
+            )}
+            {c.committees && c.committees.length > 0 && (
+              <div style={{ fontSize: 13, color: "#b0b8c9", marginTop: 2 }}>
+                Committees: {c.committees.join(", ")}
+              </div>
+            )}
             {c.role && (
               <div
                 className="contact-role contact-role-responsive"
@@ -96,31 +158,11 @@ function ContactSelect({ country, onSelect, onBack }) {
                   style={{
                     wordBreak: "break-all",
                     fontSize: 15,
-                    color: "#f3f6fa",
+                    color: "#23272f",
                   }}
                 >
                   {c.email}
                 </span>
-                <button
-                  className="contact-copy-btn-responsive"
-                  style={{
-                    background: "#1976d2",
-                    color: "#fff",
-                    fontWeight: 700,
-                    border: "none",
-                    padding: "6px 18px",
-                    borderRadius: 7,
-                    fontSize: 15,
-                    marginLeft: 0,
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleCopyEmail(c.email);
-                  }}
-                  aria-label={`Copy email for ${c.name}`}
-                >
-                  Copy
-                </button>
               </div>
             )}
           </div>
@@ -167,22 +209,8 @@ function ContactSelect({ country, onSelect, onBack }) {
         }}
       >
         <button
-          onClick={onBack}
-          style={{
-            background: "none",
-            color: "#f3d34a",
-            border: "none",
-            fontWeight: 600,
-            fontSize: 16,
-            cursor: "pointer",
-            padding: 0,
-          }}
-        >
-          &larr; Back
-        </button>
-        <button
-          onClick={() => onSelect(selected ? [selected] : [])}
-          disabled={!selected}
+          onClick={() => onSelect(selected)}
+          disabled={selected.length === 0}
         >
           Next
         </button>

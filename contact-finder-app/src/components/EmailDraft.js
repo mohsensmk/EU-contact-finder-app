@@ -12,43 +12,53 @@ function EmailDraft({
   setUserName,
   setUserCity,
 }) {
-  // Always use concise template for simplicity
+  // Let user edit country again
+  const [country, setCountry] = useState(contacts[0]?.country || "");
+  const [randomKey, setRandomKey] = useState(Date.now());
 
-  const contact = contacts[0];
-  const template = emailTemplates.concise;
+  // --- RANDOMIZATION LOGIC ---
+  function getRandomMainTemplate() {
+    const mainKeys = Object.keys(emailTemplates).filter(
+      (k) => k === "main" || /^main\d+$/.test(k),
+    );
+    const randomKey = mainKeys[Math.floor(Math.random() * mainKeys.length)];
+    return emailTemplates[randomKey];
+  }
+
+  // Re-randomize on button click by changing randomKey
+  const [template, setTemplate] = useState(getRandomMainTemplate());
   const subject = template.subject;
-  const body = template.body
-    .replace("{RecipientTitle}", contact.role || "")
+
+  const handleRandomize = () => {
+    setTemplate(getRandomMainTemplate());
+    setRandomKey(Date.now());
+  };
+
+  // Compose the email body using the latest state
+  let body = template.body
+    .replace(
+      "Your Excellency {RecipientTitle} {RecipientLastName},",
+      contacts.length === 1
+        ? `Dear Ms/Mr ${contacts[0].name.split(" ").slice(-1)[0]}, Member of the European Parliament,`
+        : "Dear Members of the European Parliament,",
+    )
+    .replace("{RecipientTitle}", "")
     .replace(
       "{RecipientLastName}",
-      contact.name ? contact.name.split(" ").slice(-1)[0] : ""
+      contacts.length === 1 ? contacts[0].name.split(" ").slice(-1)[0] : "",
     )
     .replace("{UserName}", userName)
-    .replace("{UserCity}", userCity)
-    .replace("{UserCountry}", contact.country || "")
+    .replace("{UserCity}", userCity || "[City]")
+    .replace("{UserCountry}", country || "[Country]")
     .replace("{Incident1}", "")
     .replace("{Incident2}", "")
     .replace("{PolicyAsk1}", "")
     .replace("{PolicyAsk2}", "");
 
-  const [copiedBody, setCopiedBody] = useState(false);
-  const [copiedSubject, setCopiedSubject] = useState(false);
-  const [copiedEmail, setCopiedEmail] = useState(false);
-
-  const handleCopyBody = () => {
-    navigator.clipboard.writeText(body);
-    setCopiedBody(true);
-    setTimeout(() => setCopiedBody(false), 2000);
-  };
-  const handleCopySubject = () => {
-    navigator.clipboard.writeText(subject);
-    setCopiedSubject(true);
-    setTimeout(() => setCopiedSubject(false), 2000);
-  };
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(contact.email);
-    setCopiedEmail(true);
-    setTimeout(() => setCopiedEmail(false), 2000);
+  const handleSendEmail = () => {
+    const allEmails = contacts.map((c) => c.email).join(",");
+    const mailto = `mailto:${encodeURIComponent(allEmails)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailto;
   };
 
   return (
@@ -112,7 +122,7 @@ function EmailDraft({
             />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <label>Your City </label>
+            <label>Your City</label>
             <input
               placeholder="Enter your city"
               value={userCity}
@@ -120,6 +130,41 @@ function EmailDraft({
               style={{ width: "100%", minWidth: 0 }}
             />
           </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <label>Your Country</label>
+            <input
+              placeholder="Enter your country"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              style={{ width: "100%", minWidth: 0 }}
+            />
+          </div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            gap: 18,
+            marginBottom: 18,
+            flexWrap: "wrap",
+          }}
+        >
+          <button
+            type="button"
+            onClick={handleRandomize}
+            style={{
+              background: "#1976d2",
+              color: "#fff",
+              fontWeight: 700,
+              border: "none",
+              padding: "8px 18px",
+              borderRadius: 7,
+              fontSize: 15,
+              cursor: "pointer",
+              minWidth: 180,
+            }}
+          >
+            Randomize Email Text
+          </button>
         </div>
         <div style={{ marginTop: 18 }}>
           {/* Email on top */}
@@ -127,31 +172,32 @@ function EmailDraft({
             style={{
               marginBottom: 14,
               display: "flex",
-              alignItems: "center",
+              alignItems: "flex-start",
+              flexDirection: "column",
               flexWrap: "wrap",
               gap: 8,
             }}
           >
-            <span style={{ color: "#f3f6fa", fontWeight: 600 }}>
-              Official Email:
-            </span>
-            <span style={{ color: "#b0b8c9", wordBreak: "break-all" }}>
-              {contact.email}
-            </span>
-            <button
-              style={{ padding: "2px 10px", fontSize: 13, borderRadius: 5 }}
-              onClick={handleCopyEmail}
+            <span
+              style={{ color: "#f3f6fa", fontWeight: 600, marginBottom: 4 }}
             >
-              Copy Email
-            </button>
-            {copiedEmail && (
-              <span style={{ color: "#b0b8c9", fontSize: 13 }}>Copied!</span>
-            )}
+              Official Email(s):
+            </span>
+            <ol
+              style={{
+                color: "#b0b8c9",
+                wordBreak: "break-all",
+                margin: 0,
+                paddingLeft: 20,
+              }}
+            >
+              {contacts.map((c, idx) => (
+                <li key={c.email + idx}>{c.email}</li>
+              ))}
+            </ol>
           </div>
-          {/* Subject next */}
           <div
             style={{
-              marginBottom: 10,
               fontWeight: 600,
               color: "#f3d34a",
               fontSize: 17,
@@ -165,15 +211,6 @@ function EmailDraft({
               {uxCopy.emailDraft.subjectLabel}:
             </span>{" "}
             <span style={{ color: "#f3d34a" }}>{subject}</span>
-            <button
-              style={{ padding: "2px 10px", fontSize: 13, borderRadius: 5 }}
-              onClick={handleCopySubject}
-            >
-              Copy Subject
-            </button>
-            {copiedSubject && (
-              <span style={{ color: "#b0b8c9", fontSize: 13 }}>Copied!</span>
-            )}
           </div>
           {/* Body label above box */}
           <div
@@ -205,17 +242,23 @@ function EmailDraft({
               display: "flex",
               alignItems: "center",
               gap: 8,
+              flexWrap: "wrap",
             }}
           >
             <button
-              style={{ padding: "2px 10px", fontSize: 13, borderRadius: 5 }}
-              onClick={handleCopyBody}
+              style={{
+                padding: "2px 14px",
+                fontSize: 13,
+                borderRadius: 5,
+                background: "#1976d2",
+                color: "#fff",
+                fontWeight: 700,
+                border: "none",
+              }}
+              onClick={handleSendEmail}
             >
-              Copy Body
+              Send Email
             </button>
-            {copiedBody && (
-              <span style={{ color: "#b0b8c9", fontSize: 13 }}>Copied!</span>
-            )}
           </div>
           <div
             style={{

@@ -5,6 +5,8 @@ import EmailDraft from "./components/EmailDraft";
 import { uxCopy } from "./data/uxCopy";
 import contactsData from "./data/EUOfficialContacts.real.json";
 import { emailTemplates } from "./data/emailTemplates";
+import ProgressIndicator from "./components/ProgressIndicator";
+import "./styles.minimal.css";
 
 function App() {
   const [selectedCountry, setSelectedCountry] = useState("");
@@ -57,6 +59,7 @@ function App() {
             Easily draft and send professional emails to EU officials
           </div>
         </div>
+        <ProgressIndicator step={step - 1} />
         {step === 1 && (
           <div className="card-dark">
             <div className="step-header">Step 1: Select Country</div>
@@ -99,6 +102,14 @@ function App() {
                 Step 2: Select Official
               </span>
             </div>
+            <div
+              style={{ marginBottom: 16, color: "#b0b8c9", fontWeight: 500 }}
+            >
+              <span>Selected Country: </span>
+              <span style={{ color: "#f3d34a", fontWeight: 700 }}>
+                {selectedCountry || "None"}
+              </span>
+            </div>
             <ContactSelect
               country={selectedCountry}
               onBack={() => setStep(1)}
@@ -121,6 +132,22 @@ function App() {
               <span className="step-header" style={{ margin: 0 }}>
                 Step 3: Draft & Copy Email
               </span>
+            </div>
+            <div
+              style={{ marginBottom: 16, color: "#b0b8c9", fontWeight: 500 }}
+            >
+              <span>Selected Country: </span>
+              <span style={{ color: "#f3d34a", fontWeight: 700 }}>
+                {selectedCountry || "None"}
+              </span>
+              {selectedOfficials.length > 0 && (
+                <span style={{ marginLeft: 18 }}>
+                  <span>Selected Official(s): </span>
+                  <span style={{ color: "#f3d34a", fontWeight: 700 }}>
+                    {selectedOfficials.map((o) => o.name).join(", ")}
+                  </span>
+                </span>
+              )}
             </div>
             <EmailDraft
               contacts={selectedOfficials}
