@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "react-scripts": "^5.0.1"
+  },
+  "dependencies": {
+    "gh-pages": "^6.3.0"
   }
 }
