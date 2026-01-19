@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/EU-contact-finder-app/static/css/main.02490ab3.css",
-    "main.js": "/EU-contact-finder-app/static/js/main.78044438.js",
+    "main.js": "/EU-contact-finder-app/static/js/main.0c16e025.js",
     "static/media/Shah.png": "/EU-contact-finder-app/static/media/Shah.f32a13c863d1fb01a83f.png",
     "index.html": "/EU-contact-finder-app/index.html",
     "main.02490ab3.css.map": "/EU-contact-finder-app/static/css/main.02490ab3.css.map",
-    "main.78044438.js.map": "/EU-contact-finder-app/static/js/main.78044438.js.map"
+    "main.0c16e025.js.map": "/EU-contact-finder-app/static/js/main.0c16e025.js.map"
   },
   "entrypoints": [
     "static/css/main.02490ab3.css",
-    "static/js/main.78044438.js"
+    "static/js/main.0c16e025.js"
   ]
 }
