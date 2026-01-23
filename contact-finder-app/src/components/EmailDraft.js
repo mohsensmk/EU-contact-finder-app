@@ -25,23 +25,27 @@ function EmailDraft({
     return emailTemplates[randomKey];
   }
 
-  // Re-randomize on button click by changing randomKey
   const [template, setTemplate] = useState(getRandomMainTemplate());
-  const subject = template.subject;
 
-  const handleRandomize = () => {
+  function handleRandomize() {
     setTemplate(getRandomMainTemplate());
-    setRandomKey(Date.now());
-  };
+  }
 
-  // Compose the email body using the latest state
-  let body = template.body
+  const subject = template.subject
+    .replace("{RecipientTitle}", "")
     .replace(
-      "Your Excellency {RecipientTitle} {RecipientLastName},",
-      contacts.length === 1
-        ? `Dear Ms/Mr ${contacts[0].name.split(" ").slice(-1)[0]}, Member of the European Parliament,`
-        : "Dear Members of the European Parliament,",
+      "{RecipientLastName}",
+      contacts.length === 1 ? contacts[0].name.split(" ").slice(-1)[0] : "",
     )
+    .replace("{UserName}", userName)
+    .replace("{UserCity}", userCity || "[City]")
+    .replace("{UserCountry}", country || "[Country]")
+    .replace("{Incident1}", "")
+    .replace("{Incident2}", "")
+    .replace("{PolicyAsk1}", "")
+    .replace("{PolicyAsk2}", "");
+
+  const body = template.body
     .replace("{RecipientTitle}", "")
     .replace(
       "{RecipientLastName}",
@@ -63,24 +67,7 @@ function EmailDraft({
 
   return (
     <div style={{ maxWidth: 600, margin: "0 auto", padding: 24 }}>
-      <div style={{ display: "flex", alignItems: "center", marginBottom: 24 }}>
-        <button
-          onClick={onBack}
-          style={{
-            background: "none",
-            border: "none",
-            color: "#f3d34a",
-            fontWeight: 600,
-            fontSize: 16,
-            cursor: "pointer",
-            marginRight: 12,
-            padding: 0,
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <span style={{ fontSize: 20, marginRight: 4 }}>&larr;</span> Back
-        </button>
+      <div style={{ marginBottom: 24 }}>
         <span
           style={{
             fontWeight: 700,

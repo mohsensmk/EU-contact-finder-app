@@ -143,28 +143,6 @@ function ContactSelect({ country, onSelect, onBack }) {
                 {c.role}
               </div>
             )}
-            {c.email && (
-              <div
-                className="contact-email-responsive"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                  flexWrap: "wrap",
-                  marginTop: 2,
-                }}
-              >
-                <span
-                  style={{
-                    wordBreak: "break-all",
-                    fontSize: 15,
-                    color: "#23272f",
-                  }}
-                >
-                  {c.email}
-                </span>
-              </div>
-            )}
           </div>
         ))}
       </div>
